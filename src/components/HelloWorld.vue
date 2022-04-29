@@ -1,52 +1,70 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 
-defineProps<{ msg: string }>();
+defineProps({
+  msg: {
+    type: String,
+  },
+});
+// only typescript
+// defineProps<{ msg: string }>();
 
 const count = ref(0);
+const obj = ref({ age: 18 });
+const flag = ref(true);
+
+const emit = defineEmits(["changeMsg"]);
+
+const add = () => {
+  count.value++;
+};
+
+const sub = () => {
+  count.value--;
+};
+
+const edit = () => {
+  emit("changeMsg", "hi vue");
+};
+// onMounted(sub);
+// watch(count, (newVal, oldValue) => {
+//   console.log(newVal);
+//   console.log(oldValue);
+// });
+
+const doubleCount = ref(computed(() => count.value * 2));
+// error
+const computedStyle = computed(() => {
+  if (flag.value) {
+    return {
+      color: "red",
+      fontSize: "20px",
+    };
+  }
+  return {
+    fontWeight: "bold",
+    color: "blue",
+    fontSize: "40px",
+  };
+});
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
-
-  <p>
-    Recommended IDE setup:
-    <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
-    +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-  </p>
-
-  <p>See <code>README.md</code> for more information.</p>
-
-  <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank">
-      Vite Docs
-    </a>
-    |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
-  </p>
-
-  <button type="button" @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
+  <span @click="edit">{{ msg }}</span>
+  <br />
+  <button @click="sub">-</button>
+  {{ count }}
+  <button @click="add">+</button>
+  <br />
+  <span>computed:{{ doubleCount }}</span>
+  <br />
+  <span @click="obj.age++">obj:{{ obj.age }}</span>
+  <br />
+  <span @click="flag = !flag" :class="computedStyle">wow</span>
 </template>
 
 <style scoped>
-a {
-  color: #42b983;
-}
-
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
-}
-
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
+* {
+  user-select: none;
 }
 </style>
