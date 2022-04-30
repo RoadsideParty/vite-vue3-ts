@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, onMounted, reactive, ref, StyleValue, watch } from "vue";
 
 defineProps({
   msg: {
@@ -32,9 +32,9 @@ const edit = () => {
 //   console.log(oldValue);
 // });
 
-const doubleCount = ref(computed(() => count.value * 2));
-// error
-const computedStyle = computed(() => {
+const doubleCount = computed((): number => count.value * 2);
+
+const computedStyle = computed((): StyleValue => {
   if (flag.value) {
     return {
       color: "red",
@@ -60,7 +60,7 @@ const computedStyle = computed(() => {
   <br />
   <span @click="obj.age++">obj:{{ obj.age }}</span>
   <br />
-  <span @click="flag = !flag" :class="computedStyle">wow</span>
+  <span @click="flag = !flag" :style="computedStyle">wow</span>
 </template>
 
 <style scoped>
