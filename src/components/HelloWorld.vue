@@ -12,20 +12,31 @@ defineProps({
 const count = ref(0);
 const obj = ref({ age: 18 });
 const flag = ref(true);
-
+let timer: number;
 const emit = defineEmits(["changeMsg"]);
 
 const add = () => {
   count.value++;
+  timer = setInterval(() => {
+    count.value++;
+  }, 100);
 };
-
 const sub = () => {
   count.value--;
+  timer = setInterval(() => {
+    count.value--;
+  }, 100);
 };
+window.addEventListener("mouseup", () => {
+  if (timer) {
+    clearInterval(timer);
+  }
+});
 
 const edit = () => {
   emit("changeMsg", "hi vue");
 };
+
 // onMounted(sub);
 // watch(count, (newVal, oldValue) => {
 //   console.log(newVal);
@@ -52,9 +63,9 @@ const computedStyle = computed((): StyleValue => {
 <template>
   <span @click="edit">{{ msg }}</span>
   <br />
-  <button @click="sub">-</button>
+  <button @mousedown="sub">-</button>
   {{ count }}
-  <button @click="add">+</button>
+  <button @mousedown="add">+</button>
   <br />
   <span>computed:{{ doubleCount }}</span>
   <br />
