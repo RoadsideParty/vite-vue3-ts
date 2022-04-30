@@ -10,11 +10,6 @@ defineProps({
 // defineProps<{ msg: string }>();
 
 const count = ref(0);
-const obj = ref({ age: 18 });
-const flag = ref(true);
-let timer: number;
-const emit = defineEmits(["changeMsg"]);
-
 const add = () => {
   count.value++;
   timer = setInterval(() => {
@@ -32,19 +27,12 @@ window.addEventListener("mouseup", () => {
     clearInterval(timer);
   }
 });
-
-const edit = () => {
-  emit("changeMsg", "hi vue");
-};
-
-// onMounted(sub);
-// watch(count, (newVal, oldValue) => {
-//   console.log(newVal);
-//   console.log(oldValue);
-// });
-
+let timer: number;
 const doubleCount = computed((): number => count.value * 2);
 
+const obj = ref({ age: 18 });
+
+const flag = ref(true);
 const computedStyle = computed((): StyleValue => {
   if (flag.value) {
     return {
@@ -58,23 +46,53 @@ const computedStyle = computed((): StyleValue => {
     fontSize: "40px",
   };
 });
+
+const emit = defineEmits(["changeMsg"]);
+const edit = () => {
+  emit("changeMsg", "hi vue");
+};
+
+// onMounted(sub);
+// watch(count, (newVal, oldValue) => {
+//   console.log(newVal);
+//   console.log(oldValue);
+// });
+
+const popSort = (arr: Array<number>): Array<number> => {
+  console.log("enter");
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = i; j < arr.length; j++) {
+      if (arr[i] < arr[j]) {
+        let temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      }
+    }
+  }
+  return arr;
+};
+defineExpose({
+  popSort,
+});
 </script>
 
 <template>
-  <span @click="edit">{{ msg }}</span>
-  <br />
-  <button @mousedown="sub">-</button>
-  {{ count }}
-  <button @mousedown="add">+</button>
-  <br />
-  <span>computed:{{ doubleCount }}</span>
-  <br />
-  <span @click="obj.age++">obj:{{ obj.age }}</span>
-  <br />
-  <span @click="flag = !flag" :style="computedStyle">wow</span>
+  <div style="border: 1px solid">
+    <span @click="edit">{{ msg }}</span>
+    <br />
+    <button @mousedown="sub">-</button>
+    {{ count }}
+    <button @mousedown="add">+</button>
+    <br />
+    <span>computed:{{ doubleCount }}</span>
+    <br />
+    <span @click="obj.age++">obj:{{ obj.age }}</span>
+    <br />
+    <span @click="flag = !flag" :style="computedStyle">wow</span>
+  </div>
 </template>
 
-<style scoped>
+<style>
 * {
   user-select: none;
 }
